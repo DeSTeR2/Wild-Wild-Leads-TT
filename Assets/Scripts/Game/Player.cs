@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     Image _playerImage;
 
     bool _canMove = true;
+    bool _win = false;
 
     Stack<Vector3> _movePositoins = new Stack<Vector3>();
     Stack<Tuple<int,int>> _boardPosions = new Stack<Tuple<int, int>>();
@@ -30,12 +31,15 @@ public class Player : MonoBehaviour
         _playerImage = GetComponent<Image>();
 
         if (ShopManager.instance != null) _playerImage.color = ShopManager.instance.GetColor();
+        LevelManager.OnWin += OnWin;
     }
 
     private void Init() {
         transform.position = _board.GetStartPosition();
         x = 0;
         y = 0;
+
+        _win = false;
 
         _movePositoins = new Stack<Vector3>();
         _boardPosions = new Stack<Tuple<int, int>>();
@@ -47,7 +51,7 @@ public class Player : MonoBehaviour
     }
 
     public void Move(Direction move) {
-        if (_canMove == false) return;
+        if (_canMove == false || _win) return;
         _canMove = false;
 
         Vector3 targetPosition = _board.GetNewPlayerPosition(x, y, move, _playerImage.color);
@@ -95,6 +99,11 @@ public class Player : MonoBehaviour
         StartCoroutine(EnableMove());
     }
 
+    private void OnWin() {
+        Debug.Log("WIN");
+        _win = true;
+    }
+
     private IEnumerator EnableMove() {
         yield return new WaitForSeconds(_duration * 1.2f);
         _canMove = true;
@@ -102,5 +111,7 @@ public class Player : MonoBehaviour
 
     private void OnDestroy() {
         Board.OnBoardInitComplete -= Init;
+        LevelManager.OnWin -= OnWin;
     }
+
 }

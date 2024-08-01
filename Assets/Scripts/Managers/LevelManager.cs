@@ -53,6 +53,14 @@ public class LevelManager : MonoBehaviour
             StartCoroutine(WaitTime());
             ShopManager.instance.AddBalance(_collectedCoin);
             SoundManager.instance.PlaySound(SoundType.Win);
+            OnWin?.Invoke();
+
+            _currentLevel++;
+            if (_currentLevel == _levels.Length) {
+                _currentLevel = 0;
+            }
+
+            PlayerPrefs.SetInt(_saveLevel, _currentLevel);
         }
 
         IEnumerator WaitTime() {
@@ -74,13 +82,6 @@ public class LevelManager : MonoBehaviour
     }
 
     public void NewLevel() {
-        _currentLevel++;
-        if (_currentLevel == _levels.Length) {
-            _currentLevel = 0;
-        }
-
-        PlayerPrefs.SetInt(_saveLevel, _currentLevel);
-
         StartLevel();
     }
 }
