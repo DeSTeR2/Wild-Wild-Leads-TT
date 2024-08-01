@@ -7,7 +7,7 @@ public class ChangeBallImage : MonoBehaviour
 {
     Image _image;
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         _image = GetComponent<Image>();
         ShopItem.OnChangeColor += UpdateImge;
@@ -17,7 +17,7 @@ public class ChangeBallImage : MonoBehaviour
         _image.color = color;
     }
 
-    private void OnDestroy() {
+    private void OnDisable() {
         ShopItem.OnChangeColor -= UpdateImge;
     }
 }

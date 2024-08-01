@@ -9,22 +9,25 @@ public class LevelManager : MonoBehaviour
     [SerializeField] GameObject _winPanel;
 
     [Space]
+    [SerializeField] Level[] _levels;
     [SerializeField] float _waitTimeToWin;
 
     public static LevelManager instance;
     public static Action OnWin;
     public static Action OnCoinCollect;
 
+    private int _currentLevel;
     private int _collectedCoin = 0;
+
+    private string _saveLevel = "Level";
 
     private void Awake() {
         instance = this;
     }
 
     private void Start() {
-
         _collectedCoin = 0;
-        _board.StartLevel(10, 0.3f);
+        _currentLevel = PlayerPrefs.GetInt(_saveLevel, 0);
     }
 
     public void CollectCoin() {
@@ -42,6 +45,7 @@ public class LevelManager : MonoBehaviour
     public void CheckWin(int target, int current) {
         if (target == current) {
             StartCoroutine(WaitTime());
+            ShopManager.instance.AddBalance(_collectedCoin);
         }
 
         IEnumerator WaitTime() {
@@ -52,5 +56,9 @@ public class LevelManager : MonoBehaviour
 
     public void NewLevel() {
 
+        Level curLevel = _levels[_currentLevel];
+        int boardSize = curLevel.GetBoardSize();
+
+        _board.StartLevel(boardSize);
     }
 }

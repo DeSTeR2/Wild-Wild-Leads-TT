@@ -41,13 +41,18 @@ public class ShopItem : MonoBehaviour {
         _buyBtn.onClick.AddListener(delegate { Buy(); });
         _selectBtn.onClick.AddListener(delegate { Select(); });
 
-        string selected = PlayerPrefs.GetString(_selectedStatusSave);
+        string selected = PlayerPrefs.GetString(_selectedStatusSave, "RGBA(1.000, 0.000, 0.286, 1.000)");
         if (selected == _color.ToString()) {
             Select();
         }
     }
 
     public void UpdateStatus() {
+        if (_price == 0) {
+            PlayerPrefs.SetInt(_color.ToString(), 1);
+            PlayerPrefs.Save();
+        }
+
         _ownedStatus = PlayerPrefs.GetInt(_color.ToString(), 0);
 
         if (_ownedStatus == 0) {

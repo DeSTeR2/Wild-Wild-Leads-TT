@@ -20,6 +20,8 @@ public class Player : MonoBehaviour
     int x = 0, y = 0;
     Image _playerImage;
 
+    bool _canMove = true;
+
     Stack<Vector3> _movePositoins = new Stack<Vector3>();
     Stack<Tuple<int,int>> _boardPosions = new Stack<Tuple<int, int>>();
 
@@ -40,9 +42,15 @@ public class Player : MonoBehaviour
     }
 
     public void Move(Direction move) {
+        if (_canMove == false) return;
+        _canMove = false;
+
         Vector3 targetPosition = _board.GetNewPlayerPosition(x, y, move, _playerImage.color);
 
-        if (targetPosition == Vector3.zero) return;
+        if (targetPosition == Vector3.zero) {
+            _canMove = true;
+            return;
+        } 
 
         _movePositoins.Push(transform.position);
         _boardPosions.Push(new Tuple<int, int>(x, y));
@@ -63,6 +71,7 @@ public class Player : MonoBehaviour
         }
 
         transform.DOMove(targetPosition, _duration).SetEase(_ease);
+        StartCoroutine(EnableMove());
     }
 
     public void Undo() {
@@ -75,9 +84,17 @@ public class Player : MonoBehaviour
 
         Vector3 target = _movePositoins.Pop();
         transform.DOMove(target, _duration).SetEase(_ease);
+        _canMove = false;
+
+        StartCoroutine(EnableMove());
+    }
+
+    private IEnumerator EnableMove() {
+        yield return new WaitForSeconds(_duration * 1.2f);
+        _canMove = true;
     }
 
     private void OnDestroy() {
-        Board.OnBoardInitComplete += Init;
+        Board.OnBoardInitComplete -= Init;
     }
 }

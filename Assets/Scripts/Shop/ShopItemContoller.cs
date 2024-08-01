@@ -11,12 +11,10 @@ public class ShopItemContoller : MonoBehaviour
         for (int i=0; i < childCount; i++) {
             _items.Add(transform.GetChild(i).GetComponent<ShopItem>());
         }
-        Debug.Log(_items.Count);
         ShopItem.OnSelect += UnSelect;
     }
 
     private void UnSelect() {
-        Debug.Log("select");
         for (int i=0; i < _items.Count; i++) {
             _items[i].UpdateStatus();
         }
