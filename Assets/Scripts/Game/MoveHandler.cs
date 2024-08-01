@@ -36,7 +36,19 @@ public class MoveHandler : MonoBehaviour, IDragHandler, IEndDragHandler {
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.UpArrow)) {
+            _player.Move(Direction.Up);
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow)) {
+            _player.Move(Direction.Down);
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+            _player.Move(Direction.Left);
+        }
+        if (Input.GetKeyDown(KeyCode.RightArrow)) {
+            _player.Move(Direction.Right);
+        }
+
     }
 
     public void OnDrag(PointerEventData eventData) {}

@@ -15,10 +15,13 @@ public class Board : MonoBehaviour
     [SerializeField] Color _blackColor;
     [SerializeField] Color _whiteColor;
 
+    [Space]
+    [SerializeField] float _coinProbability;
+
     GridLayoutGroup _layout;
 
     int _boardSize;
-    int _paitTarget, _currentPaint;
+    int _paintTarget, _currentPaint;
     List<List<Cell>> _board;
     List<List<int>> _status;
     Stack<Cell> _cellPainted;
@@ -31,7 +34,7 @@ public class Board : MonoBehaviour
 
     public void StartLevel(int boradSize, float blackPercent = 0.05f) {
         _boardSize = boradSize;
-        _paitTarget = 0;
+        _paintTarget = 0;
         _currentPaint = 0;
 
         if (_layout == null) {
@@ -49,21 +52,24 @@ public class Board : MonoBehaviour
             List<int> status = new List<int>();
 
             for (int j=0; j<_boardSize;j++) {
-                float change = UnityEngine.Random.Range(0f, 1f);
+                float chanse = UnityEngine.Random.Range(0f, 1f);
                 int status_ = 0;
                 Cell cell = Instantiate(_cellPrefab, transform);
                 cell.name = $"{i}, {j}";
 
-                if (change <=  blackPercent) {
+                cell.Init(_whiteColor);
+                _paintTarget++;
+
+                if (chanse <= blackPercent) {
 
                     int x = i;
                     int y = j;
 
                     bool canSpawn = true;
 
-                    for (int k=-2; k < 0; k++) {
-                        for (int p=-2; p < 0; p++) {
-                            if ((x+k<0 || y+p<0) || _board[x + k][y+p].CanStep() == false) {
+                    for (int k = -2; k < 0; k++) {
+                        for (int p = -2; p < 0; p++) {
+                            if ((x + k < 0 || y + p < 0) || _board[x + k][y + p].CanStep() == false) {
                                 canSpawn = false;
                             }
                         }
@@ -71,16 +77,16 @@ public class Board : MonoBehaviour
 
                     if (canSpawn == false) {
                         cell.Init(_whiteColor);
-                        _paitTarget++;
+                        _paintTarget++;
 
                     } else {
                         cell.Init(_blackColor, false);
                         status_ = 1;
+                        _paintTarget--;
                     }
-                } else {
-                    cell.Init(_whiteColor);
-                    _paitTarget++;
-                }
+                } else if (chanse > blackPercent && chanse <= blackPercent + _coinProbability && !(i==0 && j==0)) {
+                    cell.SetCoin();
+                } 
 
                 status.Add(status_);
                 list.Add(cell);
@@ -136,8 +142,9 @@ public class Board : MonoBehaviour
             _cellPainted.Push(_board[x][y]);
             _currentPaint++;
 
-            LevelManager.instance.CheckWin(_paitTarget, _currentPaint);
+            LevelManager.instance.CheckWin(_paintTarget, _currentPaint);
 
+            _board[x][y].CollectCoin();
             return _board[x][y].transform.position;
         }
 
