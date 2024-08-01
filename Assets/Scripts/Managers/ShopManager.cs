@@ -15,7 +15,7 @@ public class ShopManager : MonoBehaviour {
     private Color _ballColor;
     private int _balance;
 
-    private string _saveBalance = "Balance";
+    private string _saveBalance = "BalanceSave";
     private string _saveColor = "ColorSave";
 
 
@@ -28,7 +28,7 @@ public class ShopManager : MonoBehaviour {
         }
     }
 
-    private void OnEnable() {
+    private void Start() {
         _balance = PlayerPrefs.GetInt(_saveBalance, 0);
         string color = PlayerPrefs.GetString(_saveColor, "RGBA(1.000, 0.000, 0.286, 1.000)");
         
@@ -74,11 +74,8 @@ public class ShopManager : MonoBehaviour {
     }
 
     public void AddBalance(int toAdd) {
-        _balance+=toAdd;
+        _balance += toAdd;
         PlayerPrefs.SetInt(_saveBalance, _balance);
-    }
-
-    private void OnDestroy() {
-        PlayerPrefs.SetInt(_saveBalance, _balance);
+        PlayerPrefs.Save();
     }
 }
