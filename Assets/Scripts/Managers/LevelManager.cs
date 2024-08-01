@@ -1,12 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class LevelManager : MonoBehaviour
 {
     [SerializeField] Board _board;
     [SerializeField] GameObject _winPanel;
+    [SerializeField] TextMeshProUGUI _levelText;
 
     [Space]
     [SerializeField] Level[] _levels;
@@ -28,6 +31,8 @@ public class LevelManager : MonoBehaviour
     private void Start() {
         _collectedCoin = 0;
         _currentLevel = PlayerPrefs.GetInt(_saveLevel, 0);
+
+        StartLevel();
     }
 
     public void CollectCoin() {
@@ -43,6 +48,8 @@ public class LevelManager : MonoBehaviour
     }
 
     public void CheckWin(int target, int current) {
+        Debug.Log(target + " " + current);
+
         if (target == current) {
             StartCoroutine(WaitTime());
             ShopManager.instance.AddBalance(_collectedCoin);
@@ -54,11 +61,26 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public void NewLevel() {
+    public void StartLevel() {
+        _collectedCoin = 0;
+        _levelText.text = $"Level {_currentLevel + 1}";
 
         Level curLevel = _levels[_currentLevel];
         int boardSize = curLevel.GetBoardSize();
 
-        _board.StartLevel(boardSize);
+        LevelLayout matrix = curLevel.GetLevelLayout();
+
+        _board.StartLevel(boardSize, matrix);
+    }
+
+    public void NewLevel() {
+        _currentLevel++;
+        if (_currentLevel == _levels.Length) {
+            _currentLevel = 0;
+        }
+
+        PlayerPrefs.SetInt(_saveLevel, _currentLevel);
+
+        StartLevel();
     }
 }

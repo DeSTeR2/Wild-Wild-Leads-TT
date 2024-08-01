@@ -31,13 +31,23 @@ public class Board : MonoBehaviour
         _layout = GetComponent<GridLayoutGroup>();
     }
 
-    public void StartLevel(int boradSize, float blackPercent = 0.05f) {
+    public void StartLevel(int boradSize, LevelLayout layout) {
+        Matrix matrix = layout.GetMatrix();
+        
         _boardSize = boradSize;
         _paintTarget = 0;
-        _currentPaint = 0;
+        _currentPaint = 1;
 
         if (_layout == null) {
             _layout = GetComponent<GridLayoutGroup>();
+        }
+
+        if (_board != null) {
+            for (int i=0; i<_board.Count; i++) {
+                for (int j=0; j < _board[i].Count; j++) {
+                    _board[i][j].gameObject.SetActive(false);
+                }
+            }
         }
 
         _layout.constraintCount = boradSize;
@@ -50,6 +60,8 @@ public class Board : MonoBehaviour
             List<Cell> list = new List<Cell>(); 
             List<int> status = new List<int>();
 
+            Row row = matrix.matrix[i];
+
             for (int j=0; j<_boardSize;j++) {
                 float chanse = UnityEngine.Random.Range(0f, 1f);
                 int status_ = 0;
@@ -59,31 +71,14 @@ public class Board : MonoBehaviour
                 cell.Init(_whiteColor);
                 _paintTarget++;
 
-                if (chanse <= blackPercent) {
+                int singleItem = row.row[j];
 
-                    int x = i;
-                    int y = j;
-
-                    bool canSpawn = true;
-
-                    for (int k = -2; k < 0; k++) {
-                        for (int p = -2; p < 0; p++) {
-                            if ((x + k < 0 || y + p < 0) || _board[x + k][y + p].CanStep() == false) {
-                                canSpawn = false;
-                            }
-                        }
-                    }
-
-                    if (canSpawn == false) {
-                        cell.Init(_whiteColor);
-                        _paintTarget++;
-
-                    } else {
+                if (singleItem == 1) {
                         cell.Init(_blackColor, false);
                         status_ = 1;
                         _paintTarget--;
-                    }
-                } else if (chanse > blackPercent && chanse <= blackPercent + _coinProbability && !(i==0 && j==0)) {
+                    
+                } else if (chanse <=  + _coinProbability && !(i==0 && j==0)) {
                     cell.SetCoin();
                 } 
 

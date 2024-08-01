@@ -34,6 +34,11 @@ public class Player : MonoBehaviour
 
     private void Init() {
         transform.position = _board.GetStartPosition();
+        x = 0;
+        y = 0;
+
+        _movePositoins = new Stack<Vector3>();
+        _boardPosions = new Stack<Tuple<int, int>>();
 
         float size = _board.GetBoardSize();
         RectTransform rect = GetComponent<RectTransform>(); 

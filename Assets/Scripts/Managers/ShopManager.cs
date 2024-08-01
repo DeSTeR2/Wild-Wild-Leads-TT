@@ -29,7 +29,7 @@ public class ShopManager : MonoBehaviour {
     }
 
     private void OnEnable() {
-        _balance = PlayerPrefs.GetInt(_saveBalance, 10000);
+        _balance = PlayerPrefs.GetInt(_saveBalance, 0);
         string color = PlayerPrefs.GetString(_saveColor, "RGBA(1.000, 0.000, 0.286, 1.000)");
         
         string[] rgba = color.Substring(5, color.Length - 6).Split(new string[] { ", " }, System.StringSplitOptions.None);
