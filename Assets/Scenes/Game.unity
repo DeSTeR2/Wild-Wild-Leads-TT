@@ -700,11 +700,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: dd16c15f71902ff4c9ac4137a779f4d1, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -898,7 +898,11 @@ MonoBehaviour:
   music: {fileID: 443145557}
   _sounds:
   - _soundType: 0
-    _audioClip: {fileID: 0}
+    _audioClip: {fileID: 8300000, guid: 0a99de5fc764b1945ad94fb19a54a163, type: 3}
+  - _soundType: 1
+    _audioClip: {fileID: 8300000, guid: 3a3d03bdf796a5946971cb65ee387928, type: 3}
+  - _soundType: 2
+    _audioClip: {fileID: 8300000, guid: 2b34d13634f297643806580a0d4830b6, type: 3}
   _soundDelay: 0.5
   _soundSave: Sound
   _musicSave: Music

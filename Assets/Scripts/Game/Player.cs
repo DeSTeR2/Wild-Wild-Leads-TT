@@ -54,6 +54,7 @@ public class Player : MonoBehaviour
 
         if (targetPosition == Vector3.zero) {
             _canMove = true;
+            SoundManager.instance.PlaySound(SoundType.CannotMove);
             return;
         } 
 

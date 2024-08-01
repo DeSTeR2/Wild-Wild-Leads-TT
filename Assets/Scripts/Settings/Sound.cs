@@ -4,15 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum SoundType {
-    PopEffect,
-    PopApear,
-    OpenCharacter,
-    Watering,
-    AppleEat,
-    PanelMove,
-    Error,
-    AddScore,
-    EggOpen
+    Win,
+    CannotMove,
+    CoinCollect
 }
 
 [Serializable]

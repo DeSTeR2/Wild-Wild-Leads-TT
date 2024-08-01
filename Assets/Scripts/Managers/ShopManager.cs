@@ -52,7 +52,7 @@ public class ShopManager : MonoBehaviour {
     }
 
     private bool CanBuy(int price) {
-        return price < _balance;
+        return price <= _balance;
     }
 
     public int GetBalance() {

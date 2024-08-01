@@ -37,6 +37,7 @@ public class LevelManager : MonoBehaviour
 
     public void CollectCoin() {
         _collectedCoin++;
+        SoundManager.instance.PlaySound(SoundType.CoinCollect);
     }
 
     public void UndoCollectCoin() {
@@ -48,11 +49,10 @@ public class LevelManager : MonoBehaviour
     }
 
     public void CheckWin(int target, int current) {
-        Debug.Log(target + " " + current);
-
         if (target == current) {
             StartCoroutine(WaitTime());
             ShopManager.instance.AddBalance(_collectedCoin);
+            SoundManager.instance.PlaySound(SoundType.Win);
         }
 
         IEnumerator WaitTime() {
